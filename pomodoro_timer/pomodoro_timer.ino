@@ -1,7 +1,11 @@
 // ------------------------------
-// Projeto Pomodoro Físico com Arduino UNO
-// Display 7 segmentos (4 dígitos, cátodo comum)
-// LEDs, Botões e Buzzer
+// Projeto pomodoro físico com Arduino UNO 
+// Desenvolvido por: Ijair Delani
+// Componentes utilizados:
+// - Display 7 segmentos 4 dígitos (cátodo comum)
+// - LED verde e vermelho
+// - Dois botões
+// - Um buzzer
 // ------------------------------
 
 #define LED_FOCO A0
@@ -11,23 +15,23 @@
 #define BOTAO_INICIAR A2
 #define BOTAO_PAUSAR A3
 
-// Pinos dos segmentos (A a DP)
+
 int segmentos[8] = {2, 3, 4, 5, 6, 7, 8, 9};
-// Pinos dos dígitos (1 a 4)
+
 int digitos[4] = {10, 11, 12, 13};
 
-// Dígitos de 0 a 9 (a, b, c, d, e, f, g)
+// Dígitos de 0 a 9
 byte numeros[10][8] = {
-  {1,1,1,1,1,1,0,0}, // 0
-  {0,1,1,0,0,0,0,0}, // 1
-  {1,1,0,1,1,0,1,0}, // 2
-  {1,1,1,1,0,0,1,0}, // 3
-  {0,1,1,0,0,1,1,0}, // 4
-  {1,0,1,1,0,1,1,0}, // 5
-  {1,0,1,1,1,1,1,0}, // 6
-  {1,1,1,0,0,0,0,0}, // 7
-  {1,1,1,1,1,1,1,0}, // 8
-  {1,1,1,1,0,1,1,0}  // 9
+  {1,1,1,1,1,1,0,0},
+  {0,1,1,0,0,0,0,0},
+  {1,1,0,1,1,0,1,0},
+  {1,1,1,1,0,0,1,0},
+  {0,1,1,0,0,1,1,0},
+  {1,0,1,1,0,1,1,0},
+  {1,0,1,1,1,1,1,0},
+  {1,1,1,0,0,0,0,0},
+  {1,1,1,1,1,1,1,0},
+  {1,1,1,1,0,1,1,0}
 };
 
 bool rodando = false;
@@ -38,9 +42,7 @@ unsigned long tempoInicio;
 unsigned long tempoPausa = 0;
 int duracao = 25 * 60; // 25 minutos
 
-// ------------------------------
 // Função para mostrar número no display
-// ------------------------------
 void mostrarNumero(int num) {
   int dig[4];
   dig[0] = (num / 1000) % 10;
@@ -49,7 +51,7 @@ void mostrarNumero(int num) {
   dig[3] = num % 10;
 
   for (int i = 0; i < 4; i++) {
-    digitalWrite(digitos[i], LOW); // Ativa o dígito (cátodo comum)
+    digitalWrite(digitos[i], LOW); // Ativa o dígito
     for (int s = 0; s < 8; s++)
       digitalWrite(segmentos[s], numeros[dig[i]][s]);
     delay(3);
@@ -57,7 +59,6 @@ void mostrarNumero(int num) {
   }
 }
 
-// ------------------------------
 void setup() {
   for (int i = 0; i < 8; i++) pinMode(segmentos[i], OUTPUT);
   for (int i = 0; i < 4; i++) pinMode(digitos[i], OUTPUT);
@@ -75,7 +76,6 @@ void setup() {
   mostrarNumero(0);
 }
 
-// ------------------------------
 void loop() {
   if (!digitalRead(BOTAO_INICIAR)) {
     rodando = true;
